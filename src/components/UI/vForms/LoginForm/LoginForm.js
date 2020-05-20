@@ -7,7 +7,8 @@ import Button from 'react-bootstrap/Button';
 
 import styles from '../vForms.module.css';
 
-const InstallForm = ( props ) => (
+const LoginForm = (props) => (
+
     <Form className={`${styles.FormBase}`}>
         <Row>
             <Form.Group as={Col}>
@@ -25,32 +26,15 @@ const InstallForm = ( props ) => (
         </Row>
         <Row>
             <Form.Group as={Col}>
-                <Form.Label>Mesa Electoral</Form.Label>
-                <Form.Control 
-                    as="select"
-                    onChange={props.selectEvent}
-                    value={props.value}>
-                        <option disabled>Seleccione una de las opciones</option>
-                    {
-                        props.pollingStationsArray.map(
-                            pollingStation => (
-                                <option key={pollingStation.id}>{pollingStation.id}-{pollingStation.school}</option>
-                            )
-                        )
-                    }
-                </Form.Control>
-            </Form.Group>
-        </Row>
-        <Row>
-            <Form.Group as={Col}>
                 <Button 
                     variant="primary" 
-                    onClick={props.installHandler}>
-                    Instalar Mesa Electoral
+                    onClick={props.loginHanlder}>
+                    Iniciar Sesión
                 </Button>
             </Form.Group>
         </Row>
     </Form>
+    
 );
 
-export default InstallForm;
+export default LoginForm;

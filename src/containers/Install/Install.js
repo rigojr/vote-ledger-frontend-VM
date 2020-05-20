@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import Aux from '../../hoc/Aux';
-import InstallCard from '../../components/UI/vCards/InstallCard/InstallCard';
+import InstallCard from '../../components/UI/vCards/InstallLoginCard/InstallLoginCard';
 import InstallForm from '../../components/UI/vForms/InstallForm/InstallForm';
 
 class Install extends Component {
@@ -21,8 +21,13 @@ class Install extends Component {
 
     installRedirection = () =>{
         console.log("installRedirection");
-        this.props.installHandler();
-        this.props.history.push( '/login/' );
+        if (this.props.selectedPollingStation === "Seleccione una de las opciones"){
+            console.log("Error, escoja una opción")
+        } else {
+            console.log("logicRedirection");
+            this.props.installHandler();
+            this.props.history.push( '/login/' );
+        }
     }
 
     render(){
@@ -31,7 +36,9 @@ class Install extends Component {
                 <InstallCard>
                     <InstallForm
                         pollingStationsArray={this.state.pollingStation}
-                        installHandler={this.installRedirection}/>
+                        installHandler={this.installRedirection}
+                        selectEvent={this.props.selectEvent}
+                        value={this.props.selectedPollingStation}/>
                 </InstallCard>
             </Aux>
         )
