@@ -10,7 +10,25 @@
 }
 
 .InstallCard{
-    width: 20%;
+    width: 30%;
+}
+
+.logoContainer{
+    width: 30%;
+    margin: auto;
+    margin-top: 100px;
+    text-align: center;
+}
+
+.titleLogo{
+    color: #434099;
+    font-size: 62px;
+    margin-bottom: 0px;
+}
+
+.subtitleLogo{
+    color: #434099;
+    font-size: 16px;
 }
 
 .TableCard{

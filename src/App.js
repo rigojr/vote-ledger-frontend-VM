@@ -35,7 +35,7 @@ class App extends Component {
         <Switch>
             <Route 
               path="/install"
-              render={ (props) => <Install {...props} authHandler={this.authenticationHandler}/>}/>
+              render={ (props) => <Install {...props} installHandler={this.installHandler}/>}/>
             <Redirect from="/" to="/install"/>
           </Switch>
       </Layout>
