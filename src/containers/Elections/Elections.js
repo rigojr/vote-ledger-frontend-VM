@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 
 import Aux from '../../hoc/Aux';
+import Header from '../../components/Layout/Header/Header';
 
 class Elections extends Component {
     constructor(props) {
@@ -10,9 +11,11 @@ class Elections extends Component {
     }
 
     render() {
-
         let ElectionsComponent = this.props.isAuthenticated ?
+        
             <Aux>
+                <Header 
+                    authenticationHandler={this.props.authenticationHandler}/>
                 <p>Soy Elections</p>
             </Aux>:
             <Redirect from="/elections" to="/install"/>

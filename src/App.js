@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route, Redirect, Switch } from 'react-router-dom';
+import { Route, Redirect, Switch} from 'react-router-dom';
 
 import Layout from './components/Layout/Layout';
 
@@ -66,7 +66,7 @@ class App extends Component {
                   <Elections 
                     {...props}
                     isAuthenticated={this.state.authenticated}
-                />
+                    authenticationHandler={this.authenticationHandler}/>
               }
             />
             <Redirect from="/" to="/install"/>
