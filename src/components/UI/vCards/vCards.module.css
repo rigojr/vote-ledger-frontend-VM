@@ -26,11 +26,16 @@
     margin-bottom: 0px;
 }
 
-.subtitleLogo{
+.subtitleLogo, .titleElectionCard{
     color: #434099;
     font-size: 16px;
 }
 
 .TableCard{
     width: 90%;
+}
+
+.electionCard p{
+    text-align: center;
+    width: 100%;
 }
