@@ -6,6 +6,7 @@ import Layout from './components/Layout/Layout';
 import Install from './containers/Install/Install';
 import Login from './containers/Login/Login';
 import Elections from './containers/Elections/Elections';
+import Candidates from './containers/Candidates/Candidates';
 
 class App extends Component {
 
@@ -67,7 +68,17 @@ class App extends Component {
                     {...props}
                     isAuthenticated={this.state.authenticated}
                     authenticationHandler={this.authenticationHandler}/>
+              } 
+            />
+            <Route 
+              path="/candidates"
+              render={
+                (props) =>
+                <Candidates 
+                  {...props}
+                  isAuthenticated={this.state.authenticated}/>
               }
+            />
             />
             <Redirect from="/" to="/install"/>
           </Switch>
