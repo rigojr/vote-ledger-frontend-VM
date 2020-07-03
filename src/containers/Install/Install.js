@@ -1,48 +1,118 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 import Aux from '../../hoc/Aux';
 import InstallCard from '../../components/UI/vCards/InstallLoginCard/InstallLoginCard';
 import InstallForm from '../../components/UI/vForms/InstallForm/InstallForm';
+import * as actions from '../../store/actions/index';
+import Spinner from '../../components/UI/Spinner/Spinner';
 
 class Install extends Component {
 
     constructor(props) {
         super(props);
-        this.state = { 
-            pollingStation: [
-                { id: "1", voters: "0", initDate: "2020-05-05T06:00", endDate: "", enable: false, idFather: "1", school: "Telecomunicaciones"},
-                { id: "2", voters: "150", initDate: "2019-05-05T06:00", endDate: "2019-05-05T20:00", enable: false, idFather: "2", school: "Educación"},
-                { id: "3", voters: "230", initDate: "2019-05-05T06:00", endDate: "2019-05-05T20:00", enable: false, idFather: "2", school: "Derecho"},
-                { id: "4", voters: "600", initDate: "2019-05-05T06:00", endDate: "2019-05-05T20:00", enable: false, idFather: "2", school: "Civil"},
-                { id: "5", voters: "2", initDate: "2018-05-05T06:00", endDate: "2018-05-05T20:00", enable: false, idFather: "3", school: "Informática"}
-            ]
+        this.state = {
+            form: { 
+                pollingStationSelected: "Seleccione una de las opciones",
+                email: "",
+                password: ""
+            }
          };
     }
 
-    installRedirection = () =>{
-        console.log("installRedirection");
-        if (this.props.selectedPollingStation === "Seleccione una de las opciones"){
-            console.log("Error, escoja una opción")
-        } else {
-            console.log("logicRedirection");
-            this.props.installHandler();
-            this.props.history.push( '/login/' );
-        }
+    componentDidMount () {
+        this.props.onPollingStationFetch();
     }
 
+    setValue = (e) => {
+        const value = e.target.value;
+        const name = [e.target.name];
+        this.setState( prevState => ({
+            form: {
+                ...prevState.form,
+                [name]: value 
+            }
+         }));
+    }
+
+    installHandler = () => this.props.onInstallPollingStation( this.state.form.pollingStationSelected );
+
+    loginHanlder = () => this.props.onAuth( this.state.form.email, this.state.form.password, true);
+
     render(){
+
+        let InstallComponent = <Spinner/>;
+
+        if (!this.props.loadingPollingStations){
+            InstallComponent = (
+                <Aux>
+                    <InstallCard>
+                        <InstallForm
+                            pollingStationsArray={this.props.pollingStations}
+                            installHandler={this.installHandler}
+                            setValue={this.setValue}
+                            value={this.state.form}
+                            loginHanlder={this.loginHanlder}
+                            isAuthed={this.props.isAuthed}
+                            loadingAuth={this.props.loadingAuth}
+                            loadingPollingStations={this.props.loadingPollingStations}/>
+                    </InstallCard>
+                </Aux>
+            );
+        }
+
+        let errorMessage = null;
+
+        if(this.props.errorInstalling){
+            errorMessage = (
+                <Aux>
+                    Ocurrió un error en la recepción de los datos.
+                </Aux>
+            )
+        }
+
+        if(this.props.errorLogin){
+            errorMessage = (
+                <Aux>
+                    Ocurrió un error en la autentificación
+                </Aux>
+            )
+        }
+
+        let redirectLogin = null;
+
+        if( this.props.isInstalled )
+            redirectLogin = <Redirect to="/login"/>
+
         return (
             <Aux>
-                <InstallCard>
-                    <InstallForm
-                        pollingStationsArray={this.state.pollingStation}
-                        installHandler={this.installRedirection}
-                        selectEvent={this.props.selectEvent}
-                        value={this.props.selectedPollingStation}/>
-                </InstallCard>
+                {InstallComponent}
+                {errorMessage}
+                {redirectLogin}
             </Aux>
         )
     }
 }
 
-export default Install;
+const mapStateToProps = state => {
+    return{
+        pollingStations: state.install.pollingStations,
+        errorInstalling: state.install.error,
+        loadingPollingStations: state.install.loading,
+        isAuthed: state.auth.isAuthed,
+        errorLogin: state.auth.error,
+        loadingAuth: state.auth.loading,
+        isInstalled: state.install.isInstalled
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onPollingStationFetch: () => dispatch( actions.fetchPollingStation() ),
+        onAuth: ( email, password, isAdmin ) => dispatch( actions.auth( email, password, isAdmin ) ),
+        onInstallPollingStation: ( selectedPollingStation ) => dispatch( actions.installPollingStation( selectedPollingStation ) )
+    }
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(Install);

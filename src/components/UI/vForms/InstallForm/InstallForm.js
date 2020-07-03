@@ -13,23 +13,48 @@ const InstallForm = ( props ) => (
             <Form.Group as={Col}>
                 <Form.Label>Correo Electrónico</Form.Label>
                 <Form.Control
-                    type="email" />
+                    type="email"
+                    name="email"
+                    onChange={props.setValue}
+                    value={props.value.email}
+                    disabled={props.isAuthed}/>
             </Form.Group>
         </Row>
         <Row>
             <Form.Group as={Col}>
                 <Form.Label>Contraseña</Form.Label>
                     <Form.Control
-                        type="password" />
+                        type="password"
+                        name="password"
+                        onChange={props.setValue}
+                        value={props.value.password}
+                        disabled={props.isAuthed}/>
+            </Form.Group>
+        </Row>
+        <Row>
+            <Form.Group as={Col}>
+                <Button 
+                    variant="primary" 
+                    onClick={props.loginHanlder}
+                    disabled={props.isAuthed}
+                    block>
+                    {
+                        props.loadingAuth ?
+                        <span>Espere un momento, ingresando...</span>:
+                        <span>Iniciar Sesión</span>
+                    }
+                </Button>
             </Form.Group>
         </Row>
         <Row>
             <Form.Group as={Col}>
                 <Form.Label>Mesa Electoral</Form.Label>
-                <Form.Control 
+                <Form.Control   
                     as="select"
-                    onChange={props.selectEvent}
-                    value={props.value}>
+                    onChange={props.setValue}
+                    value={props.value.pollingStationSelected}
+                    name="pollingStationSelected"
+                    disabled={!props.isAuthed}>
                         <option disabled>Seleccione una de las opciones</option>
                     {
                         props.pollingStationsArray.map(
@@ -45,8 +70,14 @@ const InstallForm = ( props ) => (
             <Form.Group as={Col}>
                 <Button 
                     variant="primary" 
-                    onClick={props.installHandler}>
-                    Instalar Mesa Electoral
+                    onClick={props.installHandler}
+                    disabled={!props.isAuthed}
+                    block>
+                    {
+                        props.loadingPollingStations ?
+                        <span>Espere un momento, instalando...</span>:
+                        <span>Instalar Mesa Electoral</span>
+                    }
                 </Button>
             </Form.Group>
         </Row>

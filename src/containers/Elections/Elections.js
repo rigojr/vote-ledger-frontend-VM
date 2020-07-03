@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
@@ -27,13 +28,12 @@ class Elections extends Component {
     }
 
     render() {
-        let ElectionsComponent = this.props.isAuthenticated ?
-        
+        let ElectionsComponent = this.props.isAuthed ?
             <Aux>
                 <Header 
                     authenticationHandler={this.props.authenticationHandler}/>
             </Aux>:
-            <Redirect from="/elections" to="/install"/>
+            <Redirect to="/install"/>
 
         return (
             <Aux>
@@ -64,4 +64,10 @@ class Elections extends Component {
     }
 }
 
-export default Elections;
+const mapStateToProps = state => {
+    return {
+        isAuthed: state.auth.isAuthed
+    }
+}
+
+export default connect(mapStateToProps)(Elections);
