@@ -10,12 +10,14 @@ import './index.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import authReducer from './store/reducers/auth';
 import installReducer from './store/reducers/install';
+import voteReducer from './store/reducers/vote';
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const rootReducer = combineReducers({
   auth: authReducer,
-  install: installReducer
+  install: installReducer,
+  vote: voteReducer
 });
 
 const store = createStore(rootReducer, composeEnhancers( applyMiddleware(thunk)));

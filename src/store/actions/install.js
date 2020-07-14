@@ -63,3 +63,10 @@ export const installPollingStation = ( pollingStation ) => {
         dispatch( installPollingStationSuccess( pollingStation ) );
     }
 }
+
+export const byPassInstall = ( pollingStation ) => {
+    return {
+        type: actionTypes.BY_PASS_INSTALL,
+        selectedPollingStation: pollingStation
+    }
+}

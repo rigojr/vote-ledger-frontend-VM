@@ -1,8 +1,14 @@
 export {
-    auth
+    auth,
+    byPassAuth
 } from './auth';
 
 export {
     fetchPollingStation,
-    installPollingStation
+    installPollingStation,
+    byPassInstall
 } from './install';
+
+export {
+    fetchCandidates
+} from './vote';

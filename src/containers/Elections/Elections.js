@@ -19,7 +19,7 @@ class Elections extends Component {
                 { id: "2", description: "Electora Election 2", typeElection:"Consejo de Facultad", org:"Facultad de Ingeniería"},
                 { id: "3", description: "Electora Election 3", typeElection:"Consejo de Escuela", org:"Escuela de Ingeniería Informática"}
             ]
-         };
+        };
     }
 
     voteRedirection = () => {
@@ -34,6 +34,9 @@ class Elections extends Component {
                     authenticationHandler={this.props.authenticationHandler}/>
             </Aux>:
             <Redirect to="/install"/>
+
+        let redi = this.state.redirectCandidate ?
+            <Redirect to="/candidates"/> : null
 
         return (
             <Aux>
@@ -58,7 +61,7 @@ class Elections extends Component {
                         }
                     </Row>
                 </Container>
-                
+                {redi}
             </Aux>
         );
     }

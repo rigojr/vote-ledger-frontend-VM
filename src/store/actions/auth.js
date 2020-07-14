@@ -42,3 +42,9 @@ export const auth = (email, password, isAdmin) => {
         });
     };
 };
+
+export const byPassAuth = () => {
+    return {
+        type: actionTypes.BY_PASS_AUTH
+    };
+};

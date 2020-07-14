@@ -49,6 +49,13 @@ const installPollingStationError = ( state, action ) => {
     })
 }
 
+const byPassInstall = ( state, action ) => {
+    return updateObject( state, {
+        installedPollingStation: "123-byPass",
+        isInstalled: true
+    })
+}
+
 const reducer = ( state = initialState, action) => {
     switch (action.type){
         case actionsTypes.FETCH_POLLING_STATION_START: return fetchPollingStationStart( state, action );
@@ -57,6 +64,7 @@ const reducer = ( state = initialState, action) => {
         case actionsTypes.INSTALL_POLLING_STATION_START: return installPollingStationStart( state, action);
         case actionsTypes.INSTALL_POLLING_STATION_ERROR: return installPollingStationError( state, action);
         case actionsTypes.INSTALL_POLLING_STATION_SUCCESS: return installPollingStationSuccess( state, action );
+        case actionsTypes.BY_PASS_INSTALL: return byPassInstall( state, action );
         default: return  state;
     }
 }

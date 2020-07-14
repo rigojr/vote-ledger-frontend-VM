@@ -7,6 +7,7 @@ import InstallCard from '../../components/UI/vCards/InstallLoginCard/InstallLogi
 import InstallForm from '../../components/UI/vForms/InstallForm/InstallForm';
 import * as actions from '../../store/actions/index';
 import Spinner from '../../components/UI/Spinner/Spinner';
+import Button from 'react-bootstrap/Button';
 
 class Install extends Component {
 
@@ -40,6 +41,11 @@ class Install extends Component {
 
     loginHanlder = () => this.props.onAuth( this.state.form.email, this.state.form.password, true);
 
+    byPassHandler = () => {
+        this.props.onByPassAuth();
+        this.props.onByPassInstall(this.props.pollingStations[0]);
+    }
+
     render(){
 
         let InstallComponent = <Spinner/>;
@@ -57,7 +63,14 @@ class Install extends Component {
                             isAuthed={this.props.isAuthed}
                             loadingAuth={this.props.loadingAuth}
                             loadingPollingStations={this.props.loadingPollingStations}/>
+                        <Button
+                            variant="warning"
+                            onClick={this.byPassHandler}
+                            block>
+                            By Pass Temporal
+                        </Button>
                     </InstallCard>
+                    
                 </Aux>
             );
         }
@@ -111,7 +124,9 @@ const mapDispatchToProps = dispatch => {
     return {
         onPollingStationFetch: () => dispatch( actions.fetchPollingStation() ),
         onAuth: ( email, password, isAdmin ) => dispatch( actions.auth( email, password, isAdmin ) ),
-        onInstallPollingStation: ( selectedPollingStation ) => dispatch( actions.installPollingStation( selectedPollingStation ) )
+        onInstallPollingStation: ( selectedPollingStation ) => dispatch( actions.installPollingStation( selectedPollingStation ) ),
+        onByPassInstall: ( selectedPollingStation ) => dispatch( actions.byPassInstall(selectedPollingStation) ),
+        onByPassAuth: () => dispatch( actions.byPassAuth() )
     }
 }
 
