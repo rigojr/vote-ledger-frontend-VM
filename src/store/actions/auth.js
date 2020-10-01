@@ -1,5 +1,47 @@
 import * as actionTypes from './actionTypes';
 import axios from '../../axios';
+import {parseRawDataUser} from '../utility';
+
+export const fetchUserStart = () => {
+    return ({
+        type: actionTypes.FETCH_USERS_START    
+    })
+}
+
+export const fetchUserError = ( error ) => {
+    return ({
+        type: actionTypes.FETCH_USERS_ERROR,
+        error: error
+    })
+}
+
+export const fetchUserSuccess = ( users, fetch ) => {
+    return ({
+        type: actionTypes.FETCH_USERS_SUCCESS,
+        users: users,
+        fetch: fetch
+    })
+}
+
+export const fetchUser = ( ) => {
+    return dispatch => {
+        dispatch( fetchUserStart() );
+
+        axios.post( `/user/getall`, { parameter: "" } )
+        .then( response => {
+            const fetch = [];
+            const users = [];
+            const jsonData = JSON.parse(response.data.mensaje);
+            for( let key in jsonData){
+                const data = parseRawDataUser(jsonData[key].Record);
+                users.push({...data.user});
+                fetch.push({...data.fetch})
+            }
+            dispatch( fetchUserSuccess(users, fetch) )
+        })
+        .catch( error => {dispatch( fetchUserError(error) )})
+    }
+}
 
 export const authStart = () => {
     return {

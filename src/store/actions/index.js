@@ -1,6 +1,7 @@
 export {
     auth,
-    byPassAuth
+    byPassAuth,
+    fetchUser
 } from './auth';
 
 export {

@@ -24,6 +24,7 @@ class Install extends Component {
 
     componentDidMount () {
         this.props.onPollingStationFetch();
+        this.props.onFetchUsers();
     }
 
     setValue = (e) => {
@@ -100,7 +101,8 @@ const mapDispatchToProps = dispatch => {
         onAuth: ( email, password, isAdmin ) => dispatch( actions.auth( email, password, isAdmin ) ),
         onInstallPollingStation: ( selectedPollingStation ) => dispatch( actions.installPollingStation( selectedPollingStation ) ),
         onByPassInstall: ( selectedPollingStation ) => dispatch( actions.byPassInstall(selectedPollingStation) ),
-        onByPassAuth: () => dispatch( actions.byPassAuth() )
+        onByPassAuth: () => dispatch( actions.byPassAuth() ),
+        onFetchUsers: () => dispatch( actions.fetchUser() )
     }
 }
 
