@@ -79,7 +79,6 @@ class App extends Component {
                   isAuthenticated={this.state.authenticated}/>
               }
             />
-            />
             <Redirect from="/" to="/install"/>
           </Switch>
       </Layout>

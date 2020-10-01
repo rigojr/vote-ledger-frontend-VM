@@ -62,46 +62,20 @@ class Install extends Component {
                             loginHanlder={this.loginHanlder}
                             isAuthed={this.props.isAuthed}
                             loadingAuth={this.props.loadingAuth}
-                            loadingPollingStations={this.props.loadingPollingStations}/>
-                        <Button
-                            variant="warning"
-                            onClick={this.byPassHandler}
-                            block>
-                            By Pass Temporal
-                        </Button>
+                            loadingPollingStations={this.props.loadingPollingStations}
+                            loginError={this.props.errorLogin}
+                            installError={this.props.errorInstalling}/>
                     </InstallCard>
                     
                 </Aux>
             );
         }
 
-        let errorMessage = null;
-
-        if(this.props.errorInstalling){
-            errorMessage = (
-                <Aux>
-                    Ocurrió un error en la recepción de los datos.
-                </Aux>
-            )
-        }
-
-        if(this.props.errorLogin){
-            errorMessage = (
-                <Aux>
-                    Ocurrió un error en la autentificación
-                </Aux>
-            )
-        }
-
-        let redirectLogin = null;
-
-        if( this.props.isInstalled )
-            redirectLogin = <Redirect to="/login"/>
+        const redirectLogin = this.props.isInstalled ? <Redirect to="/login"/> : null
 
         return (
             <Aux>
                 {InstallComponent}
-                {errorMessage}
                 {redirectLogin}
             </Aux>
         )

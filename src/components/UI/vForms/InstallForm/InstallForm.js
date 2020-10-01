@@ -5,7 +5,15 @@ import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 
+import styled from 'styled-components'
+
 import styles from '../vForms.module.css';
+
+const ErrorMessage = styled.p`
+    text-align: center;
+    color: red;
+    padding-top: 20px;
+`
 
 const InstallForm = ( props ) => (
     <Form className={`${styles.FormBase}`}>
@@ -81,6 +89,19 @@ const InstallForm = ( props ) => (
                 </Button>
             </Form.Group>
         </Row>
+        {
+            props.loginError ?
+            <ErrorMessage>
+                Ocurrió un error en la autentificación
+            </ErrorMessage> : null
+        }
+        {
+            props.installError ? 
+            <ErrorMessage>
+                Ocurrió un error en la recepción de los datos.
+            </ErrorMessage> : null
+        }
+        
     </Form>
 );
 
