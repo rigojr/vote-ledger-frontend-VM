@@ -9,9 +9,10 @@ const initialState = {
     isAuthed: false,
     isAdmin: false,
     message: "",
-    error: {},
+    error: null,
     fetch: [],
     users: [],
+    userInstalled: { },
 }
 
 const authStart = (state, action) => {
@@ -20,8 +21,7 @@ const authStart = (state, action) => {
 
 const authSuccess = (state, action) => {
     return updateObject( state, {
-        token: action.idToken,
-        userId: action.userId,
+        userInstalled: action.userInfo,
         error: null,
         loading: false,
         isAuthed: true,

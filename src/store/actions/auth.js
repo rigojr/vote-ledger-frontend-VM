@@ -65,23 +65,37 @@ export const authFail = (error) => {
     };
 };
 
-export const auth = (email, password, isAdmin) => {
+export const auth = (ci, password, isAdmin, userInfo) => {
     return dispatch => {
+        // dispatch(authStart());
+        // const authData = {
+        //     email: email,
+        //     password: password,
+        //     returnSecureToken: true
+        // }
+        // axios.post('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDEp5ulwtutQr4fkQU6GJaXkIzDlEfsK2Q', authData)
+        // .then( response => {
+        //     console.log(response);
+        //     dispatch(authSuccess(response.data.idToken, response.data.localId, isAdmin));
+        // })
+        // .catch( error => {
+        //     console.log(error);
+        //     dispatch(authFail(error));
+        // });
+
         dispatch(authStart());
-        const authData = {
-            email: email,
-            password: password,
-            returnSecureToken: true
-        }
-        axios.post('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDEp5ulwtutQr4fkQU6GJaXkIzDlEfsK2Q', authData)
-        .then( response => {
-            console.log(response);
-            dispatch(authSuccess(response.data.idToken, response.data.localId, isAdmin));
+        axios.post( '/user/login', {
+            idUsuario: ci,
+            passwordHash: password
         })
-        .catch( error => {
-            console.log(error);
-            dispatch(authFail(error));
-        });
+        .then( response => {
+            if( response.data.mensaje === "ValidLogin" )
+                dispatch(authSuccess(userInfo, isAdmin));
+            else
+                dispatch(authFail())
+        })
+        .catch( error => dispatch( dispatch(authFail(error)) ))
+
     };
 };
 

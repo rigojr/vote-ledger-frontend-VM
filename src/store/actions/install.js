@@ -1,10 +1,12 @@
 import * as actionTypes from './actionTypes';
 import axios from '../../axios';
+import { parseRawData } from '../utility';
 
-export const fetchPollingStationSuccess = ( pollingStations ) => {
+export const fetchPollingStationSuccess = ( fetch, events ) => {
     return {
         type: actionTypes.FETCH_POLLING_STATION_SUCCESS,
-        pollingStations: pollingStations
+        events: events,
+        fetch: fetch
     }
 }
 
@@ -24,28 +26,30 @@ export const fetchPollingStationStart = () => {
 export const fetchPollingStation = () => {
     return dispatch => {
         dispatch(fetchPollingStationStart());
-        axios.get('/polling-station.json')
+
+        axios.post( '/event/getall', {
+            parameter :""
+        })
         .then( response => {
             const fetch = [];
-            for (let key in response.data){
-                fetch.push({
-                    id: response.data[key].id,
-                    enable: response.data[key].enable.toString(),
-                    school: response.data[key].school
-                })
+            const events = [];
+            const jsonData = JSON.parse(response.data.mensaje);
+            for( let key in jsonData){
+                const data = parseRawData(jsonData[key].Record)
+                fetch.push({...data.fetch})
+                events.push({...data.event})
             }
-            dispatch(fetchPollingStationSuccess(fetch));
+            dispatch( fetchPollingStationSuccess( fetch, events ) );
         })
-        .catch( error => {
-            dispatch(fetchPollingStationError(error));
-        })
+        .catch( error => dispatch(fetchPollingStationError(error)));
     }
 }
 
-export const installPollingStationSuccess = ( pollingStation ) => {
+export const installPollingStationSuccess = ( electoralEvent, pollingStation ) => {
     return {
         type: actionTypes.INSTALL_POLLING_STATION_SUCCESS,
-        selectedPollingStation: pollingStation
+        selectedPollingStation: pollingStation,
+        selectedElectoralEvent: electoralEvent
     }
 }
 
@@ -55,12 +59,10 @@ export const installPollingStationStart = () => {
     }
 }
 
-export const installPollingStation = ( pollingStation ) => {
+export const installPollingStation = ( electoralEvent, pollingStation ) => {
     return dispatch => {
-        dispatch( installPollingStationStart() );
-        // Async code for testing if the polling station
-        // could be installed        
-        dispatch( installPollingStationSuccess( pollingStation ) );
+        dispatch( installPollingStationStart() );   
+        dispatch( installPollingStationSuccess( electoralEvent, pollingStation ) );
     }
 }
 

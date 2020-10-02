@@ -6,12 +6,16 @@ const initialState = {
     error: null,
     loading: false,
     installedPollingStation: null,
-    isInstalled: false
+    installedElectoralEvent: null,
+    isInstalled: false,
+    fetch: null,
+    events: null,
 }
 
 const fetchPollingStationSuccess = ( state, action ) => {
     return updateObject( state, {
-        pollingStations: action.pollingStations,
+        fetch: action.fetch,
+        events: action.events,
         loading: false
     })
 }
@@ -32,6 +36,7 @@ const fetchPollingStationStart = ( state, action ) => {
 const installPollingStationSuccess = ( state, action ) => {
     return updateObject( state, { 
         installedPollingStation: action.selectedPollingStation,
+        installedElectoralEvent: action.selectedElectoralEvent,
         isInstalled: true
     } )
 }

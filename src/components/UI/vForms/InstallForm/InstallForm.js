@@ -15,14 +15,18 @@ const ErrorMessage = styled.p`
     padding-top: 20px;
 `
 
-const InstallForm = ( props ) => (
-    <Form className={`${styles.FormBase}`}>
+const InstallForm = ( props ) =>  {
+
+    const electoralEventsKeys = Object.keys(props.electoralEvents)
+
+    return (
+        <Form className={`${styles.FormBase}`}>
         <Row>
             <Form.Group as={Col}>
-                <Form.Label>Correo Electrónico</Form.Label>
+                <Form.Label>Cédula</Form.Label>
                 <Form.Control
-                    type="email"
-                    name="email"
+                    type="text"
+                    name="id"
                     onChange={props.setValue}
                     value={props.value.email}
                     disabled={props.isAuthed}/>
@@ -65,10 +69,28 @@ const InstallForm = ( props ) => (
                     disabled={!props.isAuthed}>
                         <option disabled>Seleccione una de las opciones</option>
                     {
-                        props.pollingStationsArray.map(
-                            pollingStation => (
-                                <option key={pollingStation.id}>{pollingStation.id}-{pollingStation.school}</option>
-                            )
+                        electoralEventsKeys.map(
+                            key => {
+                                const rawPollingStations = props.electoralEvents[key].record.pollingStations
+                                const rawElectoralEvent = props.electoralEvents[key]
+                                const pollingStationsKeys = Object.keys(rawPollingStations)
+                                if( rawElectoralEvent.state === 'Elección' ){
+                                    return pollingStationsKeys.map( key => {
+                                        if(rawPollingStations[key].habilitada === '1'){
+                                            return (
+                                                <option 
+                                                    key={`${rawPollingStations[key].id}-${rawElectoralEvent.id}`}
+                                                    value={`${rawElectoralEvent.id}-${rawPollingStations[key].id}`}>
+                                                    {rawElectoralEvent.id}{rawElectoralEvent.eventName}: {rawPollingStations[key].id} - {rawPollingStations[key].escuela}
+                                                </option>
+                                            )
+                                        }
+                                        return null
+                                })
+                                } 
+                                return null
+                                
+                            }
                         )
                     }
                 </Form.Control>
@@ -103,6 +125,7 @@ const InstallForm = ( props ) => (
         }
         
     </Form>
-);
+    )
+}
 
 export default InstallForm;
