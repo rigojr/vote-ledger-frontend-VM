@@ -39,17 +39,22 @@ class Login extends Component {
         const isUserAdmin = isAdmin( this.state.form.id, this.props.users)
         const userInfo = this.props.users.find( user => user.id === this.state.form.id )
         if( userInfo ){
-            const shaPassword = sha256(this.state.form.password)
-            if( shaPassword === userInfo.password ){
-                if( !isUserAdmin ){
-                    this.props.onAuth( this.state.form.id, sha256(this.state.form.password), isUserAdmin, userInfo)
-                    this.setState( prevState => ({ ...prevState, fakeLoading: true }))
-                    setTimeout( () => this.props.history.push('/elections/'), 1000)
+            if( this.props.installedPollingStation.escuela === userInfo.school )
+            {
+                const shaPassword = sha256(this.state.form.password)
+                if( shaPassword === userInfo.password ){
+                    if( !isUserAdmin ){
+                        this.props.onAuth( this.state.form.id, sha256(this.state.form.password), isUserAdmin, userInfo)
+                        this.setState( prevState => ({ ...prevState, fakeLoading: true }))
+                        setTimeout( () => this.props.history.push('/elections/'), 1000)
+                    }
+                    else
+                        alert("Error, el usuario debe ser de tipo elector para poder votar")
+                } else {
+                    alert("Error, la contraseña es incorrecta")
                 }
-                else
-                    alert("Error, el usuario debe ser de tipo elector para poder votar")
             } else {
-                alert("Error, la contraseña es incorrecta")
+                alert(`Error, el usuario debe pertenecer a la escuela ${this.props.installedPollingStation.escuela} para poder votar`)
             }
         } else {
             alert("Error, el usuario no existe")

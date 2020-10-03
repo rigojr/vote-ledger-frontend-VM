@@ -28,11 +28,7 @@ class Elections extends Component {
     constructor(props) {
         super(props);
         this.state = { 
-            elections: [
-                { id: "1", description: "Electora Election 1", typeElection:"Consejo Universitario", org:"UCAB"},
-                { id: "2", description: "Electora Election 2", typeElection:"Consejo de Facultad", org:"Facultad de Ingeniería"},
-                { id: "3", description: "Electora Election 3", typeElection:"Consejo de Escuela", org:"Escuela de Ingeniería Informática"}
-            ]
+            
         };
     }
 
@@ -54,7 +50,7 @@ class Elections extends Component {
                 <ElectorInformation>
                     <div>
                         <p><b>Bienvenido</b> { this.props.userLogged.name }</p>
-                        <p>Evento Electoral{this.props.installedElectoralEvent.id} - {this.props.installedElectoralEvent.eventName}</p>
+                        <p>Evento Electoral {this.props.installedElectoralEvent.id} - {this.props.installedElectoralEvent.eventName}</p>
                         <p>Mesa Electoral {this.props.installedPollingStation.id} - {this.props.installedPollingStation.escuela}</p>
                     </div>
                 </ElectorInformation>
