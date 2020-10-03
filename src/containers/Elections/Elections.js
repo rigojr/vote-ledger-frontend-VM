@@ -30,11 +30,12 @@ class Elections extends Component {
     constructor(props) {
         super(props);
         this.state = { 
-            
+
         };
     }
 
-    voteRedirection = () => {
+    setElection = (election) => {
+        this.props.onSetElectionSelected(election)
         this.props.history.push( '/candidates/' );
     }
 
@@ -75,7 +76,8 @@ class Elections extends Component {
                                                     typeOfElection={rawElections[key].tipoeleccion}
                                                     orgElection={rawElections[key].escuela}
                                                     descElection={rawElections[key].descripcion}
-                                                    voteButton={this.voteRedirection}/>
+                                                    rawElection={rawElections[key]}
+                                                    setElection={this.setElection}/>
                                             </Col>
                                         )
                                     else
@@ -110,7 +112,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onLogout : () => dispatch(actions.logOutElector())
+        onLogout : () => dispatch(actions.logOutElector()),
+        onSetElectionSelected : (electionSelected) => dispatch(actions.setElectionSelected(electionSelected))
     }
 }
 

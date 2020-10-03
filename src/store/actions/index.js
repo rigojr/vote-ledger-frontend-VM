@@ -12,5 +12,6 @@ export {
 } from './install';
 
 export {
-    fetchCandidates
+    fetchCandidates,
+    setElectionSelected
 } from './vote';

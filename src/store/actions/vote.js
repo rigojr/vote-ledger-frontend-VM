@@ -45,3 +45,10 @@ export const fetchCandidates = () => {
         });
     }
 }
+
+export const setElectionSelected = (electionSelected) => {
+    return {
+        type: actionTypes.SET_ELECTION_SELECTED,
+        electionSelected: electionSelected
+    }
+}

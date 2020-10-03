@@ -32,7 +32,7 @@ const ElectionsCard = ( props ) => (
                 <Row>
                     <Button
                         variant="primary"
-                        onClick={props.voteButton}
+                        onClick={ () => props.setElection(props.rawElection)}
                         block>
                         Votar
                     </Button>
