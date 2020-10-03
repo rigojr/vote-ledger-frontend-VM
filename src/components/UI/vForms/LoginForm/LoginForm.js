@@ -12,12 +12,12 @@ const LoginForm = (props) => (
     <Form className={`${styles.FormBase}`}>
         <Row>
             <Form.Group as={Col}>
-                <Form.Label>Correo Electrónico</Form.Label>
+                <Form.Label>Cédula</Form.Label>
                 <Form.Control
-                    type="email"
-                    value={props.inputValues.email}
+                    type="text"
+                    value={props.inputValues.id}
                     onChange={props.setValue}
-                    name="email"/>
+                    name="id"/>
             </Form.Group>
         </Row>
         <Row>
@@ -38,7 +38,7 @@ const LoginForm = (props) => (
                     block>
                     {
                         props.loading ?
-                        <span>Espere un momento, instalando...</span>:
+                        <span>Espere un momento...</span>:
                         <span>Iniciar Sesión</span>
                     }
                 </Button>

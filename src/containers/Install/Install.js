@@ -127,7 +127,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         onPollingStationFetch: () => dispatch( actions.fetchPollingStation() ),
-        onAuth: ( email, password, isAdmin ) => dispatch( actions.auth( email, password, isAdmin ) ),
+        onAuth: ( email, password, isAdmin, userInfo) => dispatch( actions.auth( email, password, isAdmin, userInfo) ),
         onInstallPollingStation: ( electoralEvent, pollingStation ) => dispatch( actions.installPollingStation( electoralEvent, pollingStation ) ),
         onByPassInstall: ( selectedPollingStation ) => dispatch( actions.byPassInstall(selectedPollingStation) ),
         onByPassAuth: () => dispatch( actions.byPassAuth() ),

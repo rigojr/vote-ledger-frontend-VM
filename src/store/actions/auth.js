@@ -49,12 +49,11 @@ export const authStart = () => {
     };
 };
 
-export const authSuccess = (token, userId , isAdmin) => {
+export const authSuccess = ( userInfo, isAdmin ) => {
     return {
         type: actionTypes.AUTH_SUCCESS,
-        idToken: token,
-        userId: userId,
-        isAdmin: isAdmin
+        isAdmin: isAdmin,
+        userInfo: userInfo
     };
 };
 
@@ -67,22 +66,6 @@ export const authFail = (error) => {
 
 export const auth = (ci, password, isAdmin, userInfo) => {
     return dispatch => {
-        // dispatch(authStart());
-        // const authData = {
-        //     email: email,
-        //     password: password,
-        //     returnSecureToken: true
-        // }
-        // axios.post('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDEp5ulwtutQr4fkQU6GJaXkIzDlEfsK2Q', authData)
-        // .then( response => {
-        //     console.log(response);
-        //     dispatch(authSuccess(response.data.idToken, response.data.localId, isAdmin));
-        // })
-        // .catch( error => {
-        //     console.log(error);
-        //     dispatch(authFail(error));
-        // });
-
         dispatch(authStart());
         axios.post( '/user/login', {
             idUsuario: ci,
@@ -90,7 +73,7 @@ export const auth = (ci, password, isAdmin, userInfo) => {
         })
         .then( response => {
             if( response.data.mensaje === "ValidLogin" )
-                dispatch(authSuccess(userInfo, isAdmin));
+                dispatch(authSuccess( userInfo, isAdmin ));
             else
                 dispatch(authFail())
         })

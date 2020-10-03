@@ -7,15 +7,19 @@ import LoginCard from "../../components/UI/vCards/InstallLoginCard/InstallLoginC
 import LoginFrom from '../../components/UI/vForms/LoginForm/LoginForm';
 import stylesCards from '../../components/UI/vCards/vCards.module.css';
 import * as actions from '../../store/actions/index';
+import { isAdmin } from '../../store/utility'
+import { sha256 } from 'js-sha256'
+import Spinner from '../../components/UI/Spinner/Spinner';
 
 class Login extends Component {
     constructor(props) {
         super(props);
         this.state = { 
             form: {
-                email: '',
+                id: '',
                 password: ''
-            }
+            },
+            fakeLoading: false
          };
     }
 
@@ -32,11 +36,24 @@ class Login extends Component {
     }
 
     loginRedirect = () => {
-        console.log("loginRedirect");
-        console.log(this.state.form);
-        this.props.onAuth(this.state.form.email,this.state.form.password, false);
-        //this.props.loginHandler();
-        //this.props.history.push('/elections/');
+        const isUserAdmin = isAdmin( this.state.form.id, this.props.users)
+        const userInfo = this.props.users.find( user => user.id === this.state.form.id )
+        if( userInfo ){
+            const shaPassword = sha256(this.state.form.password)
+            if( shaPassword === userInfo.password ){
+                if( !isUserAdmin ){
+                    this.props.onAuth( this.state.form.id, sha256(this.state.form.password), isUserAdmin, userInfo)
+                    this.setState( prevState => ({ ...prevState, fakeLoading: true }))
+                    setTimeout( () => this.props.history.push('/elections/'), 1000)
+                }
+                else
+                    alert("Error, el usuario debe ser de tipo elector para poder votar")
+            } else {
+                alert("Error, la contraseña es incorrecta")
+            }
+        } else {
+            alert("Error, el usuario no existe")
+        }
     }
 
     render() {
@@ -47,23 +64,26 @@ class Login extends Component {
                     loginHanlder = {this.loginRedirect}
                     inputValues = {this.state.form}
                     setValue = {this.setValue}
-                    loading = {this.props.loading}
+                    loading = {this.state.fakeLoading}
                     error = {this.props.error}/>
             </LoginCard>:
             <Redirect to="/install"/>;
 
-        let redirectElections = null;
-
-        if (this.props.isAuthed && !this.props.isAdmin)
-            redirectElections = <Redirect to="/elections"/>
+        const footerInfo = this.props.installedElectoralEvent || this.props.installedPollingStation ?
+        (
+            <div className={stylesCards.logoContainer}>
+                <p className={stylesCards.subtitleLogo}> <b>Evento Electoral</b> {this.props.installedElectoralEvent.id} - {this.props.installedElectoralEvent.eventName}</p>
+                <p className={stylesCards.subtitleLogo}> <b>Mesa Electoral</b> {this.props.installedPollingStation.id} - {this.props.installedPollingStation.escuela}</p>
+            </div>
+        ) : <Redirect to="/install"/>
 
         return (
             <Aux>
                 {loginComponent}
-                <div className={stylesCards.logoContainer}>
-                    <p className={stylesCards.subtitleLogo}> Mesa Electoral {this.props.installedPollingStation}</p>
-                </div>
-                {redirectElections}
+                {
+                    this.state.fakeLoading ? <Spinner/> : null
+                }
+                {footerInfo}
             </Aux>
         );
     }
@@ -75,8 +95,10 @@ const mapStateToProps = state => {
         error: state.auth.error,
         isInstalled: state.install.isInstalled,
         installedPollingStation: state.install.installedPollingStation,
+        installedElectoralEvent: state.install.installedElectoralEvent,
         isAuthed: state.auth.isAuthed,
-        isAdmin: state.auth.isAdmin
+        isAdmin: state.auth.isAdmin,
+        users: state.auth.fetch
     }
 }
 

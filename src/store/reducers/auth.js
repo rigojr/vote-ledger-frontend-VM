@@ -12,7 +12,8 @@ const initialState = {
     error: null,
     fetch: [],
     users: [],
-    userInstalled: { },
+    userInstalled: {},
+    userLogged: {}
 }
 
 const authStart = (state, action) => {
@@ -20,12 +21,18 @@ const authStart = (state, action) => {
 }
 
 const authSuccess = (state, action) => {
+    if(action.isAdmin)
+        return updateObject( state, {
+            userInstalled: action.userInfo,
+            error: null,
+            loading: false,
+            isAuthed: true,
+        });
     return updateObject( state, {
-        userInstalled: action.userInfo,
+        userLogged: action.userInfo,
         error: null,
         loading: false,
         isAuthed: true,
-        isAdmin: action.isAdmin
     });
 }
 
