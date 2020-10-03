@@ -87,3 +87,9 @@ export const byPassAuth = () => {
         type: actionTypes.BY_PASS_AUTH
     };
 };
+
+export const logOutElector = () => {
+    return {
+        type: actionTypes.LOGOUT_ELECTOR
+    }
+}

@@ -6,10 +6,12 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import Container from 'react-bootstrap/Container';
 
+import styled from 'styled-components';
+
 import Aux from '../../hoc/Aux';
 import Header from '../../components/Layout/Header/Header';
 import ElectionsCard from '../../components/UI/vCards/ElectionsCard/ElectionsCard';
-import styled from 'styled-components';
+import * as actions from '../../store/actions/index';
 
 const ElectorInformation = styled.div`
     div {
@@ -46,7 +48,7 @@ class Elections extends Component {
         let ElectionsComponent = this.props.isAuthed ?
             <Aux>
                 <Header 
-                    authenticationHandler={this.props.authenticationHandler}/>
+                    authenticationHandler={this.props.onLogout}/>
                 <ElectorInformation>
                     <div>
                         <p><b>Bienvenido</b> { this.props.userLogged.name }</p>
@@ -106,4 +108,10 @@ const mapStateToProps = state => {
     }
 }
 
-export default connect(mapStateToProps)(Elections);
+const mapDispatchToProps = dispatch => {
+    return {
+        onLogout : () => dispatch(actions.logOutElector())
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Elections);

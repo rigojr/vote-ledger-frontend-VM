@@ -74,15 +74,22 @@ const fetchUserSuccess = ( state, action ) => {
     })
 }
 
+const logOutElector = ( state, action ) => {
+    return updateObject( state, {
+        userLogged: {}
+    })
+}
+
 const reducer = ( state = initialState, action) => {
     switch (action.type){
         case actionTypes.AUTH_START: return authStart( state, action);
         case actionTypes.AUTH_SUCCESS: return authSuccess( state, action );
         case actionTypes.AUTH_FAIL: return authFail( state, action );
         case actionTypes.BY_PASS_AUTH: return byPassAuth( state, action );
-        case actionTypes.FETCH_USERS_START:return fetchUserStart( state, action )
-        case actionTypes.FETCH_USERS_ERROR:return fetchUserError( state, action )
-        case actionTypes.FETCH_USERS_SUCCESS:return fetchUserSuccess( state, action )
+        case actionTypes.FETCH_USERS_START: return fetchUserStart( state, action )
+        case actionTypes.FETCH_USERS_ERROR: return fetchUserError( state, action )
+        case actionTypes.FETCH_USERS_SUCCESS: return fetchUserSuccess( state, action )
+        case actionTypes.LOGOUT_ELECTOR: return logOutElector( state, action )
         default: return state;
     }
 }

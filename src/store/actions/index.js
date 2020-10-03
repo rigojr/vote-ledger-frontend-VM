@@ -1,7 +1,8 @@
 export {
     auth,
     byPassAuth,
-    fetchUser
+    fetchUser,
+    logOutElector
 } from './auth';
 
 export {

@@ -24,16 +24,6 @@ class App extends Component {
     this.setState( { authenticated: !this.state.authenticated } );
   }
 
-  installHandler = () => {
-    console.log("installHandler");
-    this.setState( { installed: !this.state.installed });
-  }
-
-  saveIdPollingStation = (event) => {
-    console.log("saveIdPollingStation");
-    this.setState( { pollingStationInstalled: event.target.value } )
-  }
-
   render() {
     return (
       <Layout>
@@ -43,10 +33,7 @@ class App extends Component {
               render={ 
                 (props) => 
                   <Install 
-                    {...props} 
-                    installHandler={this.installHandler} 
-                    selectEvent={this.saveIdPollingStation}
-                    selectedPollingStation={this.state.pollingStationInstalled}/>
+                    {...props} />
               } 
             />
             <Route 
@@ -55,9 +42,7 @@ class App extends Component {
                 (props) => 
                   <Login 
                     {...props} 
-                    loginHandler={this.authenticationHandler} 
-                    isInstalled={this.state.installed}
-                    selectedPollingStation={this.state.pollingStationInstalled}/>
+                    loginHandler={this.authenticationHandler}/>
                 }
               />
             <Route 
@@ -65,9 +50,7 @@ class App extends Component {
               render= {
                 (props) =>
                   <Elections 
-                    {...props}
-                    isAuthenticated={this.state.authenticated}
-                    authenticationHandler={this.authenticationHandler}/>
+                    {...props}/>
               } 
             />
             <Route 
@@ -75,8 +58,7 @@ class App extends Component {
               render={
                 (props) =>
                 <Candidates 
-                  {...props}
-                  isAuthenticated={this.state.authenticated}/>
+                  {...props}/>
               }
             />
             <Redirect from="/" to="/install"/>
