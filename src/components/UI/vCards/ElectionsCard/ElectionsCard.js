@@ -8,6 +8,14 @@ import Button from 'react-bootstrap/Button';
 import styles from '../vCards.module.css';
 import Aux from '../../../../hoc/Aux';
 
+import styled from 'styled-components';
+
+const DescElec = styled.p`
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+`
+
 const ElectionsCard = ( props ) => (
     <Aux>
         <Card className={`${styles.Card} ${styles.electionCard}`}>
@@ -19,7 +27,7 @@ const ElectionsCard = ( props ) => (
                     <p>{ props.orgElection }</p>                    
                 </Row>
                 <Row>
-                    <p>{ props.descElection }</p>
+                    <DescElec>{ props.descElection }</DescElec>
                 </Row>
                 <Row>
                     <Button
