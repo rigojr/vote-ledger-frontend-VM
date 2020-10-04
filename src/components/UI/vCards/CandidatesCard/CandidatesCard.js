@@ -24,12 +24,21 @@ const CandidatesCard = ( props ) => (
                         <p>{ props.candidateValue.school }</p>
                     </Row>
                     <Row>
-                        <Button
-                            variant="primary"
-                            onClick={props.voteButton}
-                            block>
-                            Seleccionar
-                        </Button>
+                        {
+                            !props.disable ? 
+                            <Button
+                                variant="primary"
+                                onClick={ () => props.addCandidate(props.candidateValue.id)}
+                                block>
+                                Seleccionar
+                            </Button> :
+                            <Button
+                                variant="primary"
+                                onClick={ () => props.deleteCandidate(props.candidateValue.id)}
+                                block>
+                                Eliminar
+                            </Button>
+                        }
                     </Row>
                 </Container>
             </Card>
