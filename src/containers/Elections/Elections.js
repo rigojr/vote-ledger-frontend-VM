@@ -43,6 +43,11 @@ class Elections extends Component {
         this.props.history.push( '/candidates/' );
     }
 
+    logOutHandler = () => {
+        this.props.onLogout()
+        this.props.onFetchUsers()
+    }
+
     render() {
         let redi = this.state.redirectCandidate ?
         <Redirect to="/candidates"/> : null
@@ -53,7 +58,7 @@ class Elections extends Component {
         let ElectionsComponent = this.props.isAuthed ?
             <Aux>
                 <Header 
-                    authenticationHandler={this.props.onLogout}/>
+                    authenticationHandler={this.logOutHandler}/>
                 <ElectorInformation>
                     <div>
                         <p><b>Bienvenido</b> { this.props.userLogged.name }</p>
@@ -121,7 +126,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         onLogout : () => dispatch(actions.logOutElector()),
-        onSetElectionSelected : (electionSelected) => dispatch(actions.setElectionSelected(electionSelected))
+        onSetElectionSelected : (electionSelected) => dispatch(actions.setElectionSelected(electionSelected)),
+        onFetchUsers: () => dispatch( actions.fetchUser() )
     }
 }
 
