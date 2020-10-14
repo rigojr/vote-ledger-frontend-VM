@@ -50,14 +50,18 @@ class Install extends Component {
         const isUserAdmin = isAdmin(this.state.form.id, this.props.users)
         const userInfo = this.props.users.find( user => user.id === this.state.form.id )
         if( userInfo ){
-            const shaPassword = sha256(this.state.form.password)
-            if( shaPassword === userInfo.password ){
-                if( isUserAdmin )
-                    this.props.onAuth( this.state.form.id, sha256(this.state.form.password), isUserAdmin, userInfo);
-                else
-                    alert("Error, el usuario debe ser de tipo administrador para poder instalar la mesa electoral")
+            if( userInfo.status === "1" ){
+                const shaPassword = sha256(this.state.form.password)
+                if( shaPassword === userInfo.password ){
+                    if( isUserAdmin )
+                        this.props.onAuth( this.state.form.id, sha256(this.state.form.password), isUserAdmin, userInfo);
+                    else
+                        alert("Error, el usuario debe ser de tipo administrador para poder instalar la mesa electoral")
+                } else {
+                    alert("Error, la contraseña es incorrecta")
+                }
             } else {
-                alert("Error, la contraseña es incorrecta")
+                alert("Error, el administrador esta inhabilitado")
             }
         } else {
             alert("Error, el usuario no existe")
