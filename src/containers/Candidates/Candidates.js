@@ -15,6 +15,7 @@ import CandidatesCard from '../../components/UI/vCards/CandidatesCard/Candidates
 import * as actions from '../../store/actions/index';
 import axios from '../../axios';
 import AllModal from '../../components/UI/Modal/AllModal';
+import { parseRawData } from '../../store/utility'
 
 const StyledH1 = styled.h1`
     font-size: 1.5rem;
@@ -80,7 +81,6 @@ class Candidates extends Component {
                     setTimeout( () => this.props.history.push( '/elections/' ), 3000 ) ;
                 })
                 .catch( error => {
-                    console.log(error)
                     this.setState({ specialMessage: "Error en el proceso de votación, solicite asistencia." })
                 })
     }
@@ -104,7 +104,29 @@ class Candidates extends Component {
 
     votebuttonHandler = () => {
         if( this.state.candidates.length === this.props.electionSelected.maximovotos){
-            this.setState({ isModal: true})
+            axios.post( '/event/getall', {
+                parameter :""
+            })
+            .then( response => {
+                const fetch = [];
+                const events = [];
+                const jsonData = JSON.parse(response.data.mensaje);
+                for( let key in jsonData){
+                    const data = parseRawData(jsonData[key].Record)
+                    fetch.push({...data.fetch})
+                    events.push({...data.event})
+                }
+                const RefreshElectoralEvent = fetch.find( electoralEvent => electoralEvent.id === this.props.installedElectoralEvent.id)
+                const RefreshPollingStation = RefreshElectoralEvent.record.pollingStations[this.props.installedPollingStation.id]
+                if(RefreshPollingStation.habilitada === "1")
+                    this.setState({ isModal: true})
+                else {
+                    this.props.onLogout()
+                    this.props.history.push( '/login/' );
+                    alert("Error, la mesa electoral ha sido inhabilitada, solicite asistencia.")
+                }
+            })
+            .catch( err => {alert( `Error en la comunicación con el Blockchain.` )} );
         } else {
             alert( `Error, es necesario seleccionar ${this.props.electionSelected.maximovotos} candidatos para poder votar` )
         }       
@@ -192,14 +214,16 @@ const mapStateToProps = state => {
         electionSelected: state.vote.electionSelected,
         users: state.auth.fetch,
         installedElectoralEvent: state.install.installedElectoralEvent,
-        userInfo: state.auth.userLogged
+        userInfo: state.auth.userLogged,
+        installedPollingStation: state.install.installedPollingStation,
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
         onFetchCandidates : () => dispatch( actions.fetchCandidates() ),
-        onUpdateLocalUser : (HistorialVotos) => dispatch(actions.updateLocalUser(HistorialVotos))
+        onUpdateLocalUser : (HistorialVotos) => dispatch(actions.updateLocalUser(HistorialVotos)),
+        onLogout : () => dispatch(actions.logOutElector()),
     }
 } 
 
