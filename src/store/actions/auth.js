@@ -93,3 +93,10 @@ export const logOutElector = () => {
         type: actionTypes.LOGOUT_ELECTOR
     }
 }
+
+export const updateLocalUser = (HistorialVotos) => {
+    return {
+        type: actionTypes.UPDATE_LOCAL_USER,
+        voteRecord: HistorialVotos
+    }
+}

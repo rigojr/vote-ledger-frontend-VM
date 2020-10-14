@@ -56,7 +56,7 @@ class Candidates extends Component {
 
                 const tempHistorialVotos = {
                     ...userTempRecord,
-                    [this.props.installedElectoralEvent.id]: this.props.electionSelected.id
+                    [this.props.installedElectoralEvent.id]: `${userTempRecord[this.props.installedElectoralEvent.id]},${this.props.electionSelected.id}`
                 }
 
                 const user = {
@@ -75,10 +75,14 @@ class Candidates extends Component {
                     parameter: JSON.stringify(user)
                 })
                 .then( response => {
+                    this.props.onUpdateLocalUser(user.HistorialVotos)
                     this.setState({ specialMessage: "Proceso de votación culminado con éxito. Pronto serás redirigido." })
                     setTimeout( () => this.props.history.push( '/elections/' ), 3000 ) ;
                 })
-                .catch( error => this.setState({ specialMessage: "Error en el proceso de votación, solicite asistencia." }))
+                .catch( error => {
+                    console.log(error)
+                    this.setState({ specialMessage: "Error en el proceso de votación, solicite asistencia." })
+                })
     }
 
     addCandidate = ( idCandidate ) => {
@@ -194,7 +198,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onFetchCandidates: () => dispatch( actions.fetchCandidates() )
+        onFetchCandidates : () => dispatch( actions.fetchCandidates() ),
+        onUpdateLocalUser : (HistorialVotos) => dispatch(actions.updateLocalUser(HistorialVotos))
     }
 } 
 

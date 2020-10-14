@@ -80,6 +80,15 @@ const logOutElector = ( state, action ) => {
     })
 }
 
+const updateLocalUser = ( state, action ) => {
+    return updateObject( state, {
+        userLogged: {
+            ...state.userLogged,
+            voteRercord: action.voteRecord
+        }
+    })
+}
+
 const reducer = ( state = initialState, action) => {
     switch (action.type){
         case actionTypes.AUTH_START: return authStart( state, action);
@@ -90,6 +99,7 @@ const reducer = ( state = initialState, action) => {
         case actionTypes.FETCH_USERS_ERROR: return fetchUserError( state, action )
         case actionTypes.FETCH_USERS_SUCCESS: return fetchUserSuccess( state, action )
         case actionTypes.LOGOUT_ELECTOR: return logOutElector( state, action )
+        case actionTypes.UPDATE_LOCAL_USER: return updateLocalUser( state, action )
         default: return state;
     }
 }

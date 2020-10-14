@@ -34,6 +34,10 @@ class Elections extends Component {
         };
     }
 
+    componentDidMount () {
+
+    }
+
     setElection = (election) => {
         this.props.onSetElectionSelected(election)
         this.props.history.push( '/candidates/' );
@@ -64,7 +68,10 @@ class Elections extends Component {
                                 key => {
                                     
                                     const ElectoralOrg = rawElections[key].escuela
-
+                                    const ElectoralEventId = this.props.installedElectoralEvent.id
+                                    const canVote = this.props.userLogged.voteRercord[ElectoralEventId] ?
+                                        this.props.userLogged.voteRercord[ElectoralEventId].split(',')[rawElections[key].id] ? true : false
+                                    : false
                                     if( 
                                         ElectoralOrg === "UCAB" || 
                                         ElectoralOrg === this.props.userLogged.faculty || 
@@ -77,7 +84,8 @@ class Elections extends Component {
                                                     orgElection={rawElections[key].escuela}
                                                     descElection={rawElections[key].descripcion}
                                                     rawElection={rawElections[key]}
-                                                    setElection={this.setElection}/>
+                                                    setElection={this.setElection}
+                                                    isEnable={canVote}/>
                                             </Col>
                                         )
                                     else

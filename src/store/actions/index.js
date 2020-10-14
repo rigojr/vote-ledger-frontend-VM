@@ -2,7 +2,8 @@ export {
     auth,
     byPassAuth,
     fetchUser,
-    logOutElector
+    logOutElector,
+    updateLocalUser
 } from './auth';
 
 export {

@@ -33,7 +33,8 @@ const ElectionsCard = ( props ) => (
                     <Button
                         variant="primary"
                         onClick={ () => props.setElection(props.rawElection)}
-                        block>
+                        block
+                        disabled={props.isEnable}>
                         Votar
                     </Button>
                 </Row>
