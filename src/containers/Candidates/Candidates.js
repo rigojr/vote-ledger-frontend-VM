@@ -1,21 +1,36 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
 
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
+import Modal from 'react-bootstrap/Modal'
+import Button from 'react-bootstrap/Button'
+
+import styled from 'styled-components';
 
 import Aux from '../../hoc/Aux';
 import Header from '../../components/Layout/Header/Header';
 import CandidatesCard from '../../components/UI/vCards/CandidatesCard/CandidatesCard';
 import * as actions from '../../store/actions/index';
 import axios from '../../axios';
+import AllModal from '../../components/UI/Modal/AllModal';
+
+const StyledH1 = styled.h1`
+    font-size: 1.5rem;
+    color: #434099;
+    text-align: center;
+    padding: 2rem 0rem;
+`
 
 class Candidates extends Component {
     constructor(props) {
         super(props);
         this.state = { 
             candidates: [],
+            isModal: false,
+            modalTitle: "Confirmación de Selección de Candidatos",
+            specialMessage: null
          };
     }
 
@@ -27,20 +42,43 @@ class Candidates extends Component {
         this.props.history.push( '/elections/' );
     }
 
-    votebuttonHandler = () => {
+    voteHandler = () => {
 
-        if( this.state.candidates.length === this.props.electionSelected.maximovotos)
             this.state.candidates.forEach( idCandidate => {
-                axios.post('/event/vote',{
+                const response = axios.post('/event/vote',{
                     idEventoElectoral: this.props.installedElectoralEvent.id,
                     idEleccion: this.props.electionSelected.id,
                     idUsuario: idCandidate,
                 })
             });
-        else
-            alert( `Error, es necesario seleccionar ${this.props.electionSelected.maximovotos} para poder votar` )
 
-       
+            const userTempRecord = this.props.userInfo.voteRercord
+
+                const tempHistorialVotos = {
+                    ...userTempRecord,
+                    [this.props.installedElectoralEvent.id]: this.props.electionSelected.id
+                }
+
+                const user = {
+                    id: this.props.userInfo.id,
+                    nombre: this.props.userInfo.name,
+                    facultad: this.props.userInfo.faculty,
+                    escuela: this.props.userInfo.school,
+                    email: this.props.userInfo.email,
+                    password: this.props.userInfo.password,
+                    HistorialVotos: tempHistorialVotos,
+                    type: this.props.userInfo.type,
+                    status: this.props.userInfo.status
+                }
+                this.setState({ specialMessage: "Emisión del voto en proceso..." })
+                axios.post('/user/save', {
+                    parameter: JSON.stringify(user)
+                })
+                .then( response => {
+                    this.setState({ specialMessage: "Proceso de votación culminado con éxito. Pronto serás redirigido." })
+                    setTimeout( () => this.props.history.push( '/elections/' ), 3000 ) ;
+                })
+                .catch( error => this.setState({ specialMessage: "Error en el proceso de votación, solicite asistencia." }))
     }
 
     addCandidate = ( idCandidate ) => {
@@ -58,6 +96,21 @@ class Candidates extends Component {
             ...prevState,
             candidates: tempCadidates
         }) )
+    }
+
+    votebuttonHandler = () => {
+        if( this.state.candidates.length === this.props.electionSelected.maximovotos){
+            this.setState({ isModal: true})
+        } else {
+            alert( `Error, es necesario seleccionar ${this.props.electionSelected.maximovotos} candidatos para poder votar` )
+        }       
+    }
+
+    handlerModal = () => {
+        this.setState({
+            isModal: !this.state.isModal,
+            specialMessage: null
+        })
     }
 
     render() {
@@ -97,6 +150,31 @@ class Candidates extends Component {
             <Aux>
                 {CandidatesComponent}
                 {RedirectComponent}
+                <AllModal
+                    showModal={() => this.handlerModal()}
+                    modalBoolean={this.state.isModal}
+                    modalTitle={this.state.modalTitle}>
+                    <Modal.Body>
+                        {
+                            this.state.candidates.map( id => {
+                                const userInfo = this.props.users.find( user => user.id === id)
+                            return <StyledH1 key={userInfo.id}><b>{userInfo.name}</b> - {userInfo.faculty} - {userInfo.school}</StyledH1>
+                            })
+                        }
+                        {
+                            this.state.specialMessage ?
+                            <StyledH1><b>{this.state.specialMessage}</b></StyledH1> :
+                            <StyledH1><b>¿Desea Continuar?</b></StyledH1> 
+                        }
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button 
+                            variant="success" 
+                            onClick={ () => this.voteHandler()}>
+                            Confirmar y Votar
+                        </Button>
+                    </Modal.Footer>
+                </AllModal>
             </Aux>
         );
     }
@@ -109,8 +187,8 @@ const mapStateToProps = state => {
         isLoading: state.vote.loading,
         electionSelected: state.vote.electionSelected,
         users: state.auth.fetch,
-        electionSelected: state.vote.electionSelected,
-        installedElectoralEvent: state.install.installedElectoralEvent
+        installedElectoralEvent: state.install.installedElectoralEvent,
+        userInfo: state.auth.userLogged
     }
 }
 

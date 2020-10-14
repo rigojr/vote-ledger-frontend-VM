@@ -41,7 +41,7 @@ const Header = ( props ) => (
                         </Button>
                         <Button 
                             variant="success"
-                            onClick={props.votebuttonHandler}
+                            onClick={() => props.votebuttonHandler()}
                             className={`${styles.btnCandidates}`}>
                             Votar
                         </Button>
