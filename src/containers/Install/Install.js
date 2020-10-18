@@ -62,12 +62,11 @@ class Install extends Component {
                 }
             } else {
                 alert("Error, el administrador esta inhabilitado")
-                this.props.onFetchUsers();
             }
         } else {
             alert("Error, el usuario no existe")
         }
-        
+        this.props.onFetchUsers();
     }
 
     byPassHandler = () => {
