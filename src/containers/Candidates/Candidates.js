@@ -45,11 +45,20 @@ class Candidates extends Component {
 
     voteHandler = () => {
 
+            // this.state.candidates.forEach( idCandidate => {
+            //     const response = axios.post('/event/vote',{
+            //         idEventoElectoral: this.props.installedElectoralEvent.id,
+            //         idEleccion: this.props.electionSelected.id,
+            //         idUsuario: idCandidate,
+            //     })
+            // });
+
             this.state.candidates.forEach( idCandidate => {
-                const response = axios.post('/event/vote',{
+                const response = axios.post('/vote/newvote',{
                     idEventoElectoral: this.props.installedElectoralEvent.id,
                     idEleccion: this.props.electionSelected.id,
                     idUsuario: idCandidate,
+                    idMesa: this.props.installedPollingStation.id
                 })
             });
 
@@ -57,9 +66,12 @@ class Candidates extends Component {
 
                 const tempHistorialVotos = {
                     ...userTempRecord,
-                    [this.props.installedElectoralEvent.id]: `${userTempRecord[this.props.installedElectoralEvent.id]},${this.props.electionSelected.id}`
+                    [this.props.installedElectoralEvent.id]: 
+                        `${
+                            userTempRecord[this.props.installedElectoralEvent.id] ? `${userTempRecord[this.props.installedElectoralEvent.id]}` : ''
+                        }${this.props.electionSelected.id},`
                 }
-
+                
                 const user = {
                     id: this.props.userInfo.id,
                     nombre: this.props.userInfo.name,
@@ -72,6 +84,7 @@ class Candidates extends Component {
                     status: this.props.userInfo.status
                 }
                 this.setState({ specialMessage: "Emisión del voto en proceso..." })
+                setTimeout( () =>
                 axios.post('/user/save', {
                     parameter: JSON.stringify(user)
                 })
@@ -82,7 +95,8 @@ class Candidates extends Component {
                 })
                 .catch( error => {
                     this.setState({ specialMessage: "Error en el proceso de votación, solicite asistencia." })
-                })
+                }) , 1000 )
+                
     }
 
     addCandidate = ( idCandidate ) => {

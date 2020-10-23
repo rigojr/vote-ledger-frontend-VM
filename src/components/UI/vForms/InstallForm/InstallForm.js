@@ -80,8 +80,8 @@ const InstallForm = ( props ) =>  {
                                             return (
                                                 <option 
                                                     key={`${rawPollingStations[key].id}-${rawElectoralEvent.id}`}
-                                                    value={`${rawElectoralEvent.id}-${rawPollingStations[key].id}`}>
-                                                    {rawElectoralEvent.id}{rawElectoralEvent.eventName}: {rawPollingStations[key].id} - {rawPollingStations[key].escuela}
+                                                    value={`${rawElectoralEvent.id}***${rawPollingStations[key].id}`}>
+                                                    {rawElectoralEvent.id}-{rawElectoralEvent.eventName}: {rawPollingStations[key].id} - {rawPollingStations[key].escuela}
                                                 </option>
                                             )
                                         }

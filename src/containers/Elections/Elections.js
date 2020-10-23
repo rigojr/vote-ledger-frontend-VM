@@ -75,7 +75,7 @@ class Elections extends Component {
                                     const ElectoralOrg = rawElections[key].escuela
                                     const ElectoralEventId = this.props.installedElectoralEvent.id
                                     const canVote = this.props.userLogged.voteRercord[ElectoralEventId] ?
-                                        this.props.userLogged.voteRercord[ElectoralEventId].split(',')[rawElections[key].id] ? true : false
+                                        this.props.userLogged.voteRercord[ElectoralEventId].split(',').findIndex( e => e === rawElections[key].id) !== -1 ? true : false
                                     : false
                                     if( 
                                         ElectoralOrg === "UCAB" || 

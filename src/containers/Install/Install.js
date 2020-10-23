@@ -40,7 +40,7 @@ class Install extends Component {
     }
 
     installHandler = () => {
-        const stringArray = this.state.form.pollingStationSelected.split('-')
+        const stringArray = this.state.form.pollingStationSelected.split('***')
         const electoralEvent = this.props.electoralEvents.find( electoralEvent => electoralEvent.id === stringArray[0] )
         const pollingStation = electoralEvent.record.pollingStations[stringArray[1]]
         this.props.onInstallPollingStation( electoralEvent, pollingStation )
