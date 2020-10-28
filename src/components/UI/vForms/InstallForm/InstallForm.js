@@ -28,7 +28,7 @@ const InstallForm = ( props ) =>  {
                     type="text"
                     name="id"
                     onChange={props.setValue}
-                    value={props.value.email}
+                    value={props.value.id}
                     disabled={props.isAuthed}/>
             </Form.Group>
         </Row>

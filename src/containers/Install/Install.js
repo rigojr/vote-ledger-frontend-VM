@@ -67,6 +67,14 @@ class Install extends Component {
             alert("Error, el usuario no existe")
         }
         this.props.onFetchUsers();
+        this.setState( prevState => ({
+            ...prevState,
+            form: { 
+                pollingStationSelected: "Seleccione una de las opciones",
+                id: "",
+                password: ""
+            }
+        }))
     }
 
     byPassHandler = () => {

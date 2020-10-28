@@ -63,6 +63,13 @@ class Login extends Component {
         } else {
             alert("Error, el usuario no existe")
         }
+        this.setState( prevState => ({
+            ...prevState,
+            form: {
+                id: '',
+                password: ''
+            },
+        }))
     }
 
     render() {
