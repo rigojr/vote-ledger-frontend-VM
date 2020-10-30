@@ -24,6 +24,19 @@ const StyledH1 = styled.h1`
     padding: 2rem 0rem;
 `
 
+const ElectorInformation = styled.div`
+    div {
+        width: 30%;
+        margin: auto;
+        margin-top: 20px;
+        text-align: center;
+    }
+    p {
+        color: #434099;
+        font-size: 16px;
+    }
+`
+
 class Candidates extends Component {
     constructor(props) {
         super(props);
@@ -44,14 +57,6 @@ class Candidates extends Component {
     }
 
     voteHandler = () => {
-
-            // this.state.candidates.forEach( idCandidate => {
-            //     const response = axios.post('/event/vote',{
-            //         idEventoElectoral: this.props.installedElectoralEvent.id,
-            //         idEleccion: this.props.electionSelected.id,
-            //         idUsuario: idCandidate,
-            //     })
-            // });
 
             this.state.candidates.forEach( idCandidate => {
                 const response = axios.post('/vote/newvote',{
@@ -160,6 +165,12 @@ class Candidates extends Component {
                 <Header
                     backbuttonHandler={this.backbuttonHandler}
                     votebuttonHandler={this.votebuttonHandler}/>
+                <ElectorInformation>
+                    <div>
+                        <p><b>Elección</b> {this.props.electionSelected.id} - {this.props.electionSelected.nombre}</p>
+                        <p><b>{this.props.electionSelected.tipoeleccion}</b></p>
+                    </div>
+                </ElectorInformation>
                 <Container>
                 <Row>
                 {
