@@ -25,19 +25,28 @@ const CandidatesCard = ( props ) => (
                     </Row>
                     <Row>
                         {
-                            !props.disable ? 
-                            <Button
-                                variant="primary"
-                                onClick={ () => props.addCandidate(props.candidateValue.id)}
-                                block>
-                                Seleccionar
-                            </Button> :
-                            <Button
-                                variant="primary"
-                                onClick={ () => props.deleteCandidate(props.candidateValue.id)}
-                                block>
-                                Eliminar
-                            </Button>
+                            props.candidateValue.status === "1" ? 
+                                !props.disable ? 
+                                <Button
+                                    variant="primary"
+                                    onClick={ () => props.addCandidate(props.candidateValue.id)}
+                                    block>
+                                    Seleccionar
+                                </Button> :
+                                <Button
+                                    variant="danger"
+                                    onClick={ () => props.deleteCandidate(props.candidateValue.id)}
+                                    block>
+                                    Eliminar
+                                </Button>
+                            :
+                                <Button
+                                    variant="info"
+                                    block
+                                    disabled>
+                                    Inhabilitado
+                                </Button>
+                            
                         }
                     </Row>
                 </Container>
