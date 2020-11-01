@@ -15,7 +15,9 @@ import CandidatesCard from '../../components/UI/vCards/CandidatesCard/Candidates
 import * as actions from '../../store/actions/index';
 import axios from '../../axios';
 import AllModal from '../../components/UI/Modal/AllModal';
-import { parseRawData } from '../../store/utility'
+import { parseRawData } from '../../store/utility';
+import ModalMessage from '../../components/UI/ModalMessage/ModalMessage';
+import { ErrorMessage } from '../../constans/cssProperties';
 
 const StyledH1 = styled.h1`
     font-size: 1.5rem;
@@ -44,7 +46,8 @@ class Candidates extends Component {
             candidates: [],
             isModal: false,
             modalTitle: "Confirmación de Selección de Candidatos",
-            specialMessage: null
+            specialMessage: null,
+            modalWarning: null
          };
     }
 
@@ -122,6 +125,7 @@ class Candidates extends Component {
     }
 
     votebuttonHandler = () => {
+        let modalWarning = null
         if( this.state.candidates.length === this.props.electionSelected.maximovotos){
             axios.post( '/event/getall', {
                 parameter :""
@@ -141,14 +145,18 @@ class Candidates extends Component {
                     this.setState({ isModal: true})
                 else {
                     this.props.onLogout()
-                    this.props.history.push( '/login/' );
+                    this.props.history.push( '/login/' )
                     alert("Error, la mesa electoral ha sido inhabilitada, solicite asistencia.")
                 }
             })
-            .catch( err => {alert( `Error en la comunicación con el Blockchain.` )} );
+            .catch( (err) => { modalWarning = `Error en la comunicación con el Blockchain.`} );
         } else {
-            alert( `Error, es necesario seleccionar ${this.props.electionSelected.maximovotos} candidatos para poder votar` )
-        }       
+             modalWarning =  `Error, es necesario seleccionar ${this.props.electionSelected.maximovotos} candidatos para poder votar`
+        }
+        this.setState( prevState => ({
+            ...prevState,
+            modalWarning
+        }))
     }
 
     handlerModal = () => {
@@ -159,6 +167,8 @@ class Candidates extends Component {
     }
 
     render() {
+
+        console.log(this.state.modalWarning)
            
         const CandidatesComponent = this.props.electionSelected.Candidatos ? ( 
             <Aux>
@@ -226,6 +236,14 @@ class Candidates extends Component {
                         </Button>
                     </Modal.Footer>
                 </AllModal>
+                {
+                    this.state.modalWarning ? 
+                        <ModalMessage
+                            modalHandler={() => this.setState( prevState => ({...prevState, modalWarning: null}))}
+                            modalTitile={"Error"}>
+                            <ErrorMessage>{ this.state.modalWarning }</ErrorMessage>
+                        </ModalMessage> : null
+                }
             </Aux>
         );
     }

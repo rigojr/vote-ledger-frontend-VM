@@ -10,6 +10,8 @@ import * as actions from '../../store/actions/index';
 import { isAdmin } from '../../store/utility'
 import { sha256 } from 'js-sha256'
 import Spinner from '../../components/UI/Spinner/Spinner';
+import ModalMessage from '../../components/UI/ModalMessage/ModalMessage';
+import { ErrorMessage } from '../../constans/cssProperties';
 
 class Login extends Component {
     constructor(props) {
@@ -19,7 +21,8 @@ class Login extends Component {
                 id: '',
                 password: ''
             },
-            fakeLoading: false
+            fakeLoading: false,
+            modalWarning: null
          };
     }
 
@@ -36,6 +39,7 @@ class Login extends Component {
     }
 
     loginRedirect = () => {
+        let modalWarning = null
         const isUserAdmin = isAdmin( this.state.form.id, this.props.users)
         const userInfo = this.props.users.find( user => user.id === this.state.form.id )
         if( userInfo ){
@@ -50,23 +54,23 @@ class Login extends Component {
                                 setTimeout( () => this.props.history.push('/elections/'), 1000)
                             }
                             else
-                                alert("Error, el usuario debe ser de tipo elector para poder votar")
+                                modalWarning = "Error, el usuario debe ser de tipo elector para poder votar"
                         } else {
-                            alert("Error, la contraseña es incorrecta")
+                            modalWarning = "Error, la contraseña es incorrecta"
                         }
                     } else {
-                        alert("Error, el elector esta inhabilitado")
+                        modalWarning = "Error, el elector esta inhabilitado"
                         this.props.onFetchUsers();
                     }
                 } else {
-                    alert(`Error, el usuario debe pertenecer a la escuela ${this.props.installedPollingStation.escuela} para poder votar`)
+                    modalWarning = `Error, el usuario debe pertenecer a la escuela ${this.props.installedPollingStation.escuela} para poder votar`
                 }
             } else {
-                alert("Error, el usuario esta inhabilitado")
+                modalWarning = "Error, el usuario esta inhabilitado"
+                this.props.onFetchUsers();
             }
-            
         } else {
-            alert("Error, el usuario no existe")
+            modalWarning = "Error, el usuario no existe"
         }
         this.setState( prevState => ({
             ...prevState,
@@ -74,6 +78,7 @@ class Login extends Component {
                 id: '',
                 password: ''
             },
+            modalWarning
         }))
     }
 
@@ -105,6 +110,14 @@ class Login extends Component {
                     this.state.fakeLoading ? <Spinner/> : null
                 }
                 {footerInfo}
+                {
+                    this.state.modalWarning ? 
+                        <ModalMessage
+                            modalHandler={() => this.setState( prevState => ({...prevState, modalWarning: null}))}
+                            modalTitile={"Error"}>
+                            <ErrorMessage>{ this.state.modalWarning }</ErrorMessage>
+                        </ModalMessage> : null
+                }
             </Aux>
         );
     }

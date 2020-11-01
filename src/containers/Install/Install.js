@@ -9,6 +9,8 @@ import * as actions from '../../store/actions/index';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import { isAdmin } from '../../store/utility'
 import { sha256 } from 'js-sha256'
+import ModalMessage from '../../components/UI/ModalMessage/ModalMessage';
+import { ErrorMessage } from '../../constans/cssProperties';
 
 class Install extends Component {
 
@@ -19,7 +21,8 @@ class Install extends Component {
                 pollingStationSelected: "Seleccione una de las opciones",
                 id: "",
                 password: ""
-            }
+            },
+            modalWarning: null
          };
     }
 
@@ -47,6 +50,7 @@ class Install extends Component {
     }
 
     loginHanlder = () => {
+        let modalWarning = null
         const isUserAdmin = isAdmin(this.state.form.id, this.props.users)
         const userInfo = this.props.users.find( user => user.id === this.state.form.id )
         if( userInfo ){
@@ -56,15 +60,15 @@ class Install extends Component {
                     if( isUserAdmin )
                         this.props.onAuth( this.state.form.id, sha256(this.state.form.password), isUserAdmin, userInfo);
                     else
-                        alert("Error, el usuario debe ser de tipo administrador para poder instalar la mesa electoral")
+                         modalWarning = "Error, el usuario debe ser de tipo administrador para poder instalar la mesa electoral"
                 } else {
-                    alert("Error, la contraseña es incorrecta")
+                     modalWarning = "Error, la contraseña es incorrecta"
                 }
             } else {
-                alert("Error, el administrador esta inhabilitado")
+                 modalWarning = "Error, el administrador esta inhabilitado"
             }
         } else {
-            alert("Error, el usuario no existe")
+             modalWarning = "Error, el usuario no existe"
         }
         this.props.onFetchUsers();
         this.setState( prevState => ({
@@ -73,7 +77,8 @@ class Install extends Component {
                 pollingStationSelected: "Seleccione una de las opciones",
                 id: "",
                 password: ""
-            }
+            },
+            modalWarning
         }))
     }
 
@@ -118,6 +123,14 @@ class Install extends Component {
             <Aux>
                 {InstallComponent}
                 {redirectLogin}
+                {
+                    this.state.modalWarning ? 
+                        <ModalMessage
+                            modalHandler={() => this.setState( prevState => ({...prevState, modalWarning: null}))}
+                            modalTitile={"Error"}>
+                            <ErrorMessage>{ this.state.modalWarning }</ErrorMessage>
+                        </ModalMessage> : null
+                }
             </Aux>
         )
     }
