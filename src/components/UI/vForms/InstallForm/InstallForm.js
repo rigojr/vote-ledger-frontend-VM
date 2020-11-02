@@ -15,6 +15,12 @@ const ErrorMessage = styled.p`
     padding-top: 20px;
 `
 
+const ImgStyled = styled.img`
+    max-width: 24px;
+    max-height: 24px;
+    margin-top: 35px;
+`
+
 const InstallForm = ( props ) =>  {
 
     const electoralEventsKeys = Object.keys(props.electoralEvents)
@@ -59,7 +65,7 @@ const InstallForm = ( props ) =>  {
             </Form.Group>
         </Row>
         <Row>
-            <Form.Group as={Col}>
+            <Form.Group as={Col} sm="10">
                 <Form.Label>Mesa Electoral</Form.Label>
                 <Form.Control   
                     as="select"
@@ -94,6 +100,13 @@ const InstallForm = ( props ) =>  {
                         )
                     }
                 </Form.Control>
+            </Form.Group>
+            <Form.Group as={Col} sm="2">
+                <ImgStyled 
+                    src={process.env.PUBLIC_URL + 'refresh.png'}
+                    onClick={ () => props.refresh() }
+                    alt="Actualizar"
+                    title="Actualizar"/> 
             </Form.Group>
         </Row>
         <Row>

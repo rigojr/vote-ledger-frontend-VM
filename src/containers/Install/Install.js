@@ -42,6 +42,11 @@ class Install extends Component {
          }));
     }
 
+    fetchData = () => {
+        this.props.onPollingStationFetch();
+        this.props.onFetchUsers();
+    }
+
     installHandler = () => {
         const stringArray = this.state.form.pollingStationSelected.split('***')
         const electoralEvent = this.props.electoralEvents.find( electoralEvent => electoralEvent.id === stringArray[0] )
@@ -103,7 +108,8 @@ class Install extends Component {
                 loadingAuth={this.props.loadingAuth}
                 loadingPollingStations={this.props.loadingPollingStations}
                 loginError={this.props.errorLogin}
-                installError={this.props.errorInstalling}/>
+                installError={this.props.errorInstalling}
+                refresh={this.fetchData}/>
             : <Spinner/>
 
         if (!this.props.loadingPollingStations){
