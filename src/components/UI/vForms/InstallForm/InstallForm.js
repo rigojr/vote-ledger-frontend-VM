@@ -19,6 +19,7 @@ const ImgStyled = styled.img`
     max-width: 24px;
     max-height: 24px;
     margin-top: 35px;
+    cursor: pointer;
 `
 
 const InstallForm = ( props ) =>  {
