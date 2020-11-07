@@ -167,8 +167,6 @@ class Candidates extends Component {
     }
 
     render() {
-
-        console.log(this.state.modalWarning)
            
         const CandidatesComponent = this.props.electionSelected.Candidatos ? ( 
             <Aux>
