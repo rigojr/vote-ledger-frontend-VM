@@ -14,7 +14,7 @@ const ModalMessage = (props) => {
         <AllModal
             modalBoolean={true}
             showModal={props.modalHandler}
-            modalTitile={props.modalTitile}
+            modalTitle={props.modalTitile}
             small={true}>
             <MainContainer>
                 {props.children}
